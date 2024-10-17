@@ -1,0 +1,67 @@
+// Set Baud Rate to 4800
+:SetBaudRate4800
+  `AT+IPR=4800` /C!    // Send the AT command to set baud rate to 4800
+  /N                   // Send newline (CRLF)
+;
+
+// Set Address to 120
+:SetAddress
+  `AT+ADDRESS=120` /C! // Send AT command to set the address to 120
+  /N                   // Send newline (CRLF)
+;
+
+// Set Network ID to 6
+:SetNetworkID
+  `AT+NETWORKID=6` /C! // Set network ID to 6
+  /N                   // Send newline (CRLF)
+;
+
+// Set LoRa Parameters (Spreading Factor, Bandwidth, etc.)
+:SetLoRaParameters
+  `AT+PARAMETER=7,9,4,12` /C! // Set SF=7, BW=500kHz, CR=4/8, Preamble=12
+  /N                          // Send newline (CRLF)
+;
+
+// Send a message to address 120
+:SendMessage
+  `AT+SEND=120,5,HELLO` /C!  // Send data "HELLO" to address 120
+  /N                         // Send newline (CRLF)
+;
+
+// Check for incoming messages
+:CheckForIncomingMessage
+  /K `+` =                   // Read first character to check if it starts with `+`
+  (
+    /K `R` =                 // Check if it's an incoming RCV message
+    (
+      /K `C` =               // Further verify "RCV"
+      (
+        /K `V` =             // Confirm it's "+RCV="
+        (
+          `+RCV=` /C!        // Display the prefix for confirmation
+          /K                 // Read and display the sender's address
+          `Address: ` /C! /C!
+          /K                 // Read and display the data length
+          `Length: ` /C! /C!
+          /K                 // Read and display the actual data
+          `Data: ` /C! /C!
+          /K                 // Read and display RSSI
+          `RSSI: ` /C! /C!
+          /K                 // Read and display SNR
+          `SNR: ` /C! /C!
+        )
+      )
+    )
+  )
+  /N                         // Send newline
+;
+
+// Main control routine to start LoRa communication and check for messages
+:StartLoRa
+  SetBaudRate4800            // Call function to set baud rate
+  SetAddress                 // Call function to set address
+  SetNetworkID               // Call function to set network ID
+  SetLoRaParameters          // Call function to configure LoRa parameters
+  SendMessage                // Call function to send a message
+  CheckForIncomingMessage    // Call function to check for incoming messages
+;
