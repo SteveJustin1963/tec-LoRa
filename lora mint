@@ -1,3 +1,6 @@
+// to use reduce functions and variables to one letter
+
+
 // Set Baud Rate to 4800
 :SetBaudRate4800
   `AT+IPR=4800` /C!    // Send the AT command to set baud rate to 4800
@@ -65,3 +68,8 @@
   SendMessage                // Call function to send a message
   CheckForIncomingMessage    // Call function to check for incoming messages
 ;
+
+
+
+
+
